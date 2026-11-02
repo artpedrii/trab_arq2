@@ -1,3 +1,4 @@
+//imports
 #include <stdio.h> 
 #include <pthread.h>
 #include <stdlib.h>
@@ -42,7 +43,6 @@ typedef struct {
     int linha_inicio;
     int linha_fim;
 } InfoThread;
-
 void* multiplicar_paralelizada(void* arg) {
     InfoThread *info = (InfoThread*) arg;
     for (int i = info->linha_inicio; i < info->linha_fim; i++) {
@@ -54,6 +54,23 @@ void* multiplicar_paralelizada(void* arg) {
         }
     }
     pthread_exit(NULL);
+}
+
+//salva matriz
+void salvar_matriz_arquivo(const char *nome_arquivo, double matriz[N][N]) {
+    FILE *arquivo = fopen(nome_arquivo, "w");
+    if (arquivo == NULL) {
+        printf("Erro ao criar o arquivo de resultado.\n");
+        return;
+    }
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            fprintf(arquivo, "%.2f ", matriz[i][j]);
+        }
+        fprintf(arquivo, "\n");
+    }
+    fclose(arquivo);
+    printf("Matriz resultante salva com sucesso em %s!\n", nome_arquivo);
 }
 
 int main() {
@@ -69,32 +86,32 @@ int main() {
     //calcula tempo sequencial
     clock_gettime(CLOCK_MONOTONIC, &inicio);
     multiplicar_sequencial();
+    salvar_matriz_arquivo("sequencial.txt", C);
     clock_gettime(CLOCK_MONOTONIC, &fim);
-    tempo_sequencial = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9;
+    tempo_sequencial = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9; //segundos
     printf("Tempo sequencial (%dx%d): %f segundos\n", N, N, tempo_sequencial);
     
     //**PARALELA *//
     // **VERSÃO PARALELA DA MULTIPLICAÇÃO** //
-    int num_threads = 4; 
-    pthread_t threads[8];
-    InfoThread info[8];
+    int num_threads = 4; //quantidade threads
+    pthread_t threads[8]; //vetor guardando ate oito threads
+    InfoThread info[8]; //id da thread para definir o quanto cada uma faz
     int linhas_por_thread = N / num_threads;
     // Inicia o cronômetro para a versão paralela
-    clock_gettime(CLOCK_MONOTONIC, &inicio);
-    // 1. Cria as threads distribuindo as fatias de linhas
+    clock_gettime(CLOCK_MONOTONIC, &inicio); 
     for (int i = 0; i < num_threads; i++) {
         info[i].id_thread = i;
         info[i].linha_inicio = i * linhas_por_thread;
         info[i].linha_fim = (i == num_threads - 1) ? N : (i + 1) * linhas_por_thread;
-
         pthread_create(&threads[i], NULL, multiplicar_paralelizada, (void*)&info[i]);
-    }
+    } //distribui a linha respectiva para cada thread e calcula
     for (int i = 0; i < num_threads; i++) {
-        pthread_join(threads[i], NULL);
+        pthread_join(threads[i], NULL); //espera terminar
     }
+    salvar_matriz_arquivo("paralela.txt", C); //salva
     clock_gettime(CLOCK_MONOTONIC, &fim);
-    tempo_paralelo = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9;
-    printf("Tempo paralelo (%d threads, %dx%d): %f segundos\n", num_threads, N, N, tempo_paralelo);
+    tempo_paralelo = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9; //segundos
+    printf("Tempo paralelo (%d threads, %dx%d): %f segundos\n", num_threads, N, N, tempo_paralelo); //imprime
 
     return 0;
 }
