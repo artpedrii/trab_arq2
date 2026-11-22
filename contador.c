@@ -46,7 +46,7 @@ int main() {
     double tempo_execucao_sequencial;
     double tempo_execucao_paralelaA;
     double tempo_execucao_paralelaB;
-    int numero_threads = 2;
+    int numero_threads = 8;
 
     //**SEQUENCIAL**//
     //inicia o cálculo do tempo da versão sequencial

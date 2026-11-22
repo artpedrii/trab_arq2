@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define N 512 //define a dimensão da matriz (muda de acordo com a que foi gerada pelo outro programa).
+#define N 1024 //define a dimensão da matriz (muda de acordo com a que foi gerada pelo outro programa).
 
 double A[N][N]; //define os espaços das matrizes
 double B[N][N];
@@ -80,8 +80,8 @@ int main() {
     double tempo_paralelo;
     
     //carregando as matrizes
-    carregar_matriz("A_512.txt", A);
-    carregar_matriz("B_512.txt", B);
+    carregar_matriz("A_1024.txt", A);
+    carregar_matriz("B_1024.txt", B);
 
     //calcula tempo sequencial
     clock_gettime(CLOCK_MONOTONIC, &inicio);
@@ -93,7 +93,7 @@ int main() {
     
     //**PARALELA *//
     // **VERSÃO PARALELA DA MULTIPLICAÇÃO** //
-    int num_threads = 4; //quantidade threads
+    int num_threads = 8; //quantidade threads
     pthread_t threads[8]; //vetor guardando ate oito threads
     InfoThread info[8]; //id da thread para definir o quanto cada uma faz
     int linhas_por_thread = N / num_threads;

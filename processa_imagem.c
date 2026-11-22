@@ -63,7 +63,7 @@ int main () {
     struct timespec inicio, fim;
     int largura, altura, canais;
     //carrega imagem 
-    unsigned char *imagem = stbi_load("imagem3_1024(1).png", &largura, &altura, &canais, 1);
+    unsigned char *imagem = stbi_load("imagem1_256(1).png", &largura, &altura, &canais, 1);
     if (imagem == NULL) {
         printf("Erro ao carregar a imagem.\n");
         return 1;
@@ -94,7 +94,7 @@ int main () {
     for (int i = 0; i < largura * altura; i++) {
         imagem_saida_paralela[i] = imagem[i]; //mantem as bordas inalteradas
     }
-    int num_threads = 4; //quantidade threads
+    int num_threads = 2; //quantidade threads
     pthread_t threads[8]; //inicializa threads na quantidade maxima
     ThreadData dados_threads[num_threads];
     int linhas_por_thread = (altura - 2) / num_threads; //calcula linhas para thread
