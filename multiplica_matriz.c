@@ -1,5 +1,5 @@
 //imports
-#include <stdio.h> 
+#include <stdio.h>
 #include <pthread.h>
 #include <stdlib.h>
 #include <time.h>
@@ -29,7 +29,7 @@ void carregar_matriz(const char *nome_arquivo, double matriz[N][N]) {
 void multiplicar_sequencial() {
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            C[i][j] = 0.0; 
+            C[i][j] = 0.0;
             for (int k = 0; k < N; k++) {
                 C[i][j] += A[i][k] * B[k][j];
             }
@@ -78,7 +78,7 @@ int main() {
     struct timespec inicio, fim;
     double tempo_sequencial;
     double tempo_paralelo;
-    
+
     //carregando as matrizes
     carregar_matriz("A_1024.txt", A);
     carregar_matriz("B_1024.txt", B);
@@ -86,11 +86,11 @@ int main() {
     //calcula tempo sequencial
     clock_gettime(CLOCK_MONOTONIC, &inicio);
     multiplicar_sequencial();
-    salvar_matriz_arquivo("sequencial.txt", C);
     clock_gettime(CLOCK_MONOTONIC, &fim);
+    salvar_matriz_arquivo("sequencial.txt", C);
     tempo_sequencial = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9; //segundos
     printf("Tempo sequencial (%dx%d): %f segundos\n", N, N, tempo_sequencial);
-    
+
     //**PARALELA *//
     // **VERSÃO PARALELA DA MULTIPLICAÇÃO** //
     int num_threads = 8; //quantidade threads
@@ -98,7 +98,7 @@ int main() {
     InfoThread info[8]; //id da thread para definir o quanto cada uma faz
     int linhas_por_thread = N / num_threads;
     // Inicia o cronômetro para a versão paralela
-    clock_gettime(CLOCK_MONOTONIC, &inicio); 
+    clock_gettime(CLOCK_MONOTONIC, &inicio);
     for (int i = 0; i < num_threads; i++) {
         info[i].id_thread = i;
         info[i].linha_inicio = i * linhas_por_thread;
@@ -108,8 +108,8 @@ int main() {
     for (int i = 0; i < num_threads; i++) {
         pthread_join(threads[i], NULL); //espera terminar
     }
-    salvar_matriz_arquivo("paralela.txt", C); //salva
     clock_gettime(CLOCK_MONOTONIC, &fim);
+    salvar_matriz_arquivo("paralela.txt", C); //salva
     tempo_paralelo = (fim.tv_sec - inicio.tv_sec) + (fim.tv_nsec - inicio.tv_nsec) / 1e9; //segundos
     printf("Tempo paralelo (%d threads, %dx%d): %f segundos\n", num_threads, N, N, tempo_paralelo); //imprime
 
