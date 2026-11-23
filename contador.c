@@ -4,6 +4,8 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+//O NUMERO DE THREADS ESCOLHIDO DEVE SER ALTERADO NO CÓDIGO.
+
 #define OBJETIVO 100000000
 
 //implementação sequencial

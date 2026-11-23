@@ -4,6 +4,9 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+//O NUMERO DE THREADS E NOME DO ARQUIVO DE IMAGEM A SER LIDO DEVEM SER ALTERADOS NO CÓDIGO. 
+//UTILIZE A FLAG: -lm por conta das bibliotecas de leitura de imagem.
+
 // Define a macro de implementação para a biblioteca de leitura de imagens
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

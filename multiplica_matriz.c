@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <time.h>
 
+//O NUMERO DA MATRIZ ALOCADA DE FORMA FIXA DEVE SER MUDADO NO DEFINE, O NOME DO ARQUIVO E O NUMERO DE THREADS TAMBEM DEVE SER ALTERADOS NO CÓDIGO PARA 
+//NOVOS TESTES.
+
 #define N 1024 //define a dimensão da matriz (muda de acordo com a que foi gerada pelo outro programa).
 
 double A[N][N]; //define os espaços das matrizes
